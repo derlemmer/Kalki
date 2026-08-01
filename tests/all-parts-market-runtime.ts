@@ -1,0 +1,15 @@
+import { getPartProfile } from "../database/import/partProfiles";
+import { matchListingToPart } from "../lib/partTitleMatcher";
+
+const names = ["Motor komplett", "Zylinderkopf", "Zylinder / Zylinderbank", "Kurbelwelle", "Getriebe", "Kupplung komplett", "Kupplungsdeckel", "Lichtmaschinendeckel", "Ölwanne", "Ölkühler", "Anlasser", "Lichtmaschine / Stator", "Ritzelabdeckung", "Kardan / Endantrieb", "Kühler", "Kühlerventilator", "Vergaseranlage komplett", "Einspritzdüsen", "Luftfilterkasten", "Ansaugstutzen", "Benzinpumpe", "Tankgeber", "Felgensatz", "Vorderradfelge", "Hinterradfelge", "Gabel komplett", "Gabelholm links", "Gabelholm rechts", "Gabelbrücke oben", "Gabelbrücke unten", "Schwinge", "Federbein", "Umlenkung", "Steckachse vorne", "Steckachse hinten", "Lenkungsdämpfer", "Bremssättel vorne Satz", "Bremssattel hinten", "Bremspumpe vorne", "Bremszylinder hinten", "Bremsscheiben vorne Satz", "Bremsscheibe hinten", "Bremsleitungen", "Lenker", "Stummel links", "Stummel rechts", "Lenkerarmatur links", "Lenkerarmatur rechts", "Gasgriff / Gaszüge", "Kupplungshebel", "Bremshebel", "Spiegel Satz", "Tacho / Kombiinstrument", "Zündschloss mit Schlüsseln", "Schlosssatz komplett", "ECU / CDI", "Kabelbaum", "Regler / Gleichrichter", "Sicherungskasten", "Relais-Satz", "Zündspulen Satz", "Anlasserrelais", "Scheinwerfer", "Rücklicht", "Blinker Satz", "Verkleidungssatz komplett", "Kanzel / Frontmaske", "Seitenverkleidung links", "Seitenverkleidung rechts", "Bugspoiler", "Heckverkleidung", "Kotflügel vorne", "Hinterradabdeckung", "Windschutzscheibe", "Innenverkleidung / Abdeckungen", "Kennzeichenhalter", "Tank", "Tankdeckel", "Sitzbank Fahrer", "Soziussitz", "Sitzbank komplett", "Haltegriffe", "Auspuffanlage komplett", "Krümmer", "Endschalldämpfer original", "Rahmen mit Papieren", "Heckrahmen", "Fußrastenanlage Fahrer", "Sozius-Fußrasten Satz", "Seitenständer", "Hauptständer", "Motorhalter", "Kettenschutz", "Koffersatz", "Topcase", "Kofferhalter", "Sturzbügel", "Motorschutz", "Griffheizung", "Navigationshalter", "Zubehörhebel Satz", "Kettensatz", "Kettenradträger / Ruckdämpfer", "Kühlerausgleichsbehälter", "Thermostat / Thermostatgehäuse", "Hupe", "Batteriehalter / Batteriekasten", "Kennzeichenbeleuchtung"] as string[];
+const removed = new Set(["ABS-Modulator", "ABS-Sensor hinten", "ABS-Sensor vorne", "Blinker einzeln", "Bremssattel vorne links", "Bremssattel vorne rechts", "Drosselklappengehäuse", "Endschalldämpfer Zubehör", "Hitzeschutzblech", "Sammler / Kat", "Sensoren / Geber", "Zündspule einzeln"]);
+const failures: Array<{ name: string; reason: string }> = [];
+for (const name of names) {
+  if (removed.has(name)) throw new Error(`Entfernte Position noch aktiv: ${name}`);
+  const title = `Suzuki GSX-R 750 GR7DB ${name}`;
+  const result = matchListingToPart(title, name, getPartProfile(name));
+  if (!result.accepted) failures.push({ name, reason: result.reason });
+}
+if (names.length !== 108) throw new Error(`Erwartet 108 Teile, gefunden ${names.length}.`);
+if (failures.length) throw new Error(`Fehlerhafte Teileprofile: ${JSON.stringify(failures)}`);
+console.log(`ALL_PARTS_MARKET_OK (${names.length} Teile)`);

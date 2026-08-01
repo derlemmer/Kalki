@@ -1,0 +1,45 @@
+{
+  "name": "kalki",
+  "version": "1.5.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "catalog:generate": "python scripts/generate-catalog.py",
+    "db:seed": "python scripts/seed-database.py",
+    "test:data": "python scripts/validate-catalog.py",
+    "test": "npm run typecheck && npm run test:data && npm run test:zero && npm run test:ui && npm run test:model-relevance && npm run test:market && npm run test:pure && npm run test:parts && npm run test:all-parts && npm run test:search && npm run test:recognition && npm run test:scope && npm run test:catalog-runtime && npm run test:database",
+    "test:market": "tsx scripts/test-market-isolation.ts",
+    "test:pure": "tsx tests/pure-tests.ts",
+    "test:parts": "tsx tests/part-title-runtime.ts",
+    "test:search": "tsx tests/market-search-runtime.ts",
+    "test:database": "python tests/database-tests.py",
+    "test:recognition": "tsx tests/recognition-runtime.ts",
+    "test:scope": "tsx tests/market-scope-runtime.ts",
+    "test:catalog-runtime": "tsx tests/catalog-runtime.ts",
+    "test:all-parts": "tsx tests/all-parts-market-runtime.ts",
+    "test:zero": "python tests/zero-price-policy.py",
+    "test:ui": "python tests/offer-links-ui.py",
+    "test:model-relevance": "tsx tests/model-relevance-runtime.ts"
+  },
+  "dependencies": {
+    "better-sqlite3": "^13.0.1",
+    "dotenv": "^17.4.2",
+    "next": "16.2.11",
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "tsx": "^4.23.1",
+    "typescript": "^5.9.0"
+  },
+  "engines": {
+    "node": "22.x"
+  }
+}
